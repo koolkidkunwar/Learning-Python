@@ -1,0 +1,139 @@
+#This is Task 2
+#Katarina is developing a two-player dice game.
+#The players roll two 6-sided dice each and get points depending on what they
+#roll. There are 5 rounds in a game. In each round, each player rolls the two dice.
+#The rules are:
+#• The points rolled on each player’s dice are added to their score.
+#• If the total is an even number, an additional 10 points are added to their score.
+#• If the total is an odd number, 5 points are subtracted from their score.
+#• If they roll a double, they get to roll one extra die and get the number of points #rolled added to
+#their score.
+#• The score of a player cannot go below 0 at any point.
+#• The person with the highest score at the end of the 5 rounds wins.
+#• If both players have the same score at the end of the 5 rounds, they each roll 1 die and
+#whoever gets the highest score wins (this repeats until someone wins).
+#Only authorised players are allowed to play the game.
+#Where appropriate, input from the user should be validated.
+#Design, develop, test and evaluate a program that:
+#1. Allows two players to enter their details, which are then authenticated to ensure that #they are
+#authorised players.
+#2. Allows each player to roll two 6-sided dice.
+#3. Calculates and outputs the points for each round and each player’s total score.
+#4. Allows the players to play 5 rounds.
+#5. If both players have the same score after 5 rounds, allows each player to roll 1 die #each until
+#someone wins.
+#6. Outputs who has won at the end of the 5 rounds.
+#7. Stores the winner’s score, and their name, in an external file.
+#8. Displays the score and player name of the top 5 winning scores from the external file.
+import csv
+import sys
+import random
+import time
+
+class Player:
+    def __init__(self,username,score,roundnumber):
+       self.score = score
+       self.roundnumber = roundnumber
+       self.username = username
+
+
+
+    def login(self):
+        verified = 0
+
+        username = input("Enter your username here: ")
+        password = input("Enter your password here: ")
+        with open("Logininfo.txt","r",newline = "") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if username and password in row:
+                    verified = True
+                    self.username = username
+
+                    print("Log In succesfull. Welcome Player!")
+        if verified == 0:
+            print("Incorrect Credentials")
+            sys.exit()
+
+    def roll(self,):
+        print("This is roll number",self.roundnumber+1)
+        remainingrounds = 4-self.roundnumber
+        time.sleep(1.6)
+        print("You have",remainingrounds,"rounds left after this!")
+        time.sleep(1.6)
+        Die1 = random.randint(1,6)
+        Die2 = random.randint(1,6)
+        Die3 = random.randint(1,6)
+        rolltotal = Die1 + Die2
+        print("You rolled a",Die1,"and a",Die2)
+        time.sleep(3)
+        if rolltotal % 2 == 0:
+            print("Your roll total was even so an extra 10 was added to your score!")
+            time.sleep(2.2)
+            rolltotal += 10
+            print("Your new roll total is...",rolltotal)
+            time.sleep(1.6)
+        else:
+            print("Your roll total was odd so 5 was subtracted!")
+            time.sleep(2.2)
+            rolltotal -= 5
+            print("Your new roll total is...",rolltotal)
+            time.sleep(2.2)
+        if Die1 == Die2:
+            print("Both Dice were the same so an extra Die will be rolled!")
+            time.sleep(1.6)
+            print("Your rolled...",Die3)
+            time.sleep(1.6)
+            rolltotal += Die3
+            print("Your new roll total is...",rolltotal)
+            time.sleep(2.2)
+        self.score += rolltotal
+        if self.score < 0:
+            self.score = 0
+        print("Your score is....",self.score)
+        time.sleep(1.6)
+        self.roundnumber += 1
+
+player1 = Player(0,0,0)
+player2 = Player(0,0,0)
+player1.login()
+player2.login()
+print("This game of Dice is a match between",player1.username,"and",player2.username)
+for i in range(5):
+    print(player1.username,"READY TO ROLLLL")
+    time.sleep(1.6)
+    player1.roll()
+    print(player2.username,"READY TO ROLLLL")
+    time.sleep(1.6)
+    player2.roll() 
+
+
+def compare():
+    if player1.score > player2.score:
+        print(player1.username,"is the WINNER!")
+    elif player2.score > player2.score:
+        print(player2.username,"is the WINNER!")
+    else:
+        winner()
+
+def winner():
+    winner = False
+    print("WOW! Looks like its a DRAW! But that's just not good enought!")
+    print("Lets use a tiebreaker! Whoever rolls highest wins!")
+    while winner == False:   
+        die1 = random.randint(1,6)
+        print(player1.username,"rolled a .....",die1+"!")
+        die2 = random.randint(1,6)
+        print(player2.username,"rolled a .....",die2+"!")
+        if die1 > die2:
+            print("Player1 is the Winner!")
+            winner = True
+        elif die2 > die1:
+            print("Player2 is the Winner!")]
+            winner = True
+        else:
+            print("WOW! Another tie!. Lets try again!")
+        
+
+
+
